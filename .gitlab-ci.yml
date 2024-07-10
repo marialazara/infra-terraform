@@ -1,44 +1,35 @@
 stages:
-- init
+- validate
 - plan
 - apply
-
-variables:
-  TF_STATE_BUCKET: marialazara-us-east-1-terraform-state
-  TF_STATE_KEY: terraform.tfstate
-  AWS_REGION: us-east-1
-  DYNAMODB_TABLE: marialazara-us-east-1-terraform-lock
-
-#before_script:
-#- apk add --no-cache bash git openssh
-#- curl "https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip" -o "terraform.zip"
-#- unzip terraform.zip
-#- mv terraform /usr/local/bin/
-#- rm terraform.zip
-#
-
-init:
-  stage: init
+image:
+  name: hashicorp/terraform:light
+  entrypoint:
+  - '/usr/bin/env'
+  - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+before_script:
+- export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+- export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+- rm -rf .terraform
+- terraform --version
+- terraform init
+validate:
+  stage: validate
   script:
-  - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  - terraform init -backend-config="bucket=$TF_STATE_BUCKET" -backend-config="key=$TF_STATE_KEY" -backend-config="region=$AWS_REGION"
-
+  - terraform validate
 plan:
   stage: plan
   script:
-  - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  - terraform plan -out=tfplan
-
+  - terraform plan -out "planfile"
+  dependencies:
+  - validate
+  artifacts:
+    paths:
+    - planfile
 apply:
   stage: apply
   script:
-  - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-  - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-  - terraform apply -auto-approve tfplan
+  - terraform apply -input=false "planfile"
+  dependencies:
+  - plan
   when: manual
-
-cache:
-  paths:
-  - .terraform
