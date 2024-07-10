@@ -9,12 +9,13 @@ variables:
   AWS_REGION: us-east-1
   DYNAMODB_TABLE: marialazara-us-east-1-terraform-lock
 
-before_script:
-- apk add --no-cache bash git openssh
-- curl "https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip" -o "terraform.zip"
-- unzip terraform.zip
-- mv terraform /usr/local/bin/
-- rm terraform.zip
+#before_script:
+#- apk add --no-cache bash git openssh
+#- curl "https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip" -o "terraform.zip"
+#- unzip terraform.zip
+#- mv terraform /usr/local/bin/
+#- rm terraform.zip
+#
 
 init:
   stage: init
