@@ -35,10 +35,10 @@ apply:
   - plan
   when: manual
 
-destroy:
-  stage: destroy
-  script:
-  - terraform destroy -auto-approve
-  dependencies:
-  - apply
-  when: manual
+#destroy:
+#stage: destroy
+#script:
+#- terraform destroy -auto-approve
+#dependencies:
+# - apply
+# when: manual
