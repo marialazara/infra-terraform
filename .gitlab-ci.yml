@@ -1,8 +1,9 @@
 stages:
 - validate
-- destroy
 - plan
 - apply
+#- destroy
+
 image:
   name: hashicorp/terraform:light
   entrypoint:
@@ -15,10 +16,32 @@ before_script:
 - terraform --version
 - terraform init
 
-destroy:
-  stage: destroy
+validate:
+  stage: validate
   script:
-  - terraform destroy -auto-approve
+  - terraform validate
+plan:
+  stage: plan
+  script:
+  - terraform plan -out "planfile"
+  dependencies:
+  - validate
+  artifacts:
+    paths:
+    - planfile
+apply:
+  stage: apply
+  script:
+  - terraform apply -input=false "planfile"
+  dependencies:
+  - plan
+
+#destroy:
+# stage: destroy
+# script:
+# - terraform destroy -auto-approve
+
+
 
 
 
