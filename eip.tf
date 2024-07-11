@@ -1,5 +1,9 @@
 resource "aws_eip" "app-orbbi-eip" {
   vpc = true
+
+  tags = {
+    Name = "Elastic IP Orbbi App"
+  }
 }
 
 resource "aws_eip_association" "eip_assoc" {
