@@ -15,30 +15,10 @@ before_script:
 - terraform --version
 - terraform init
 
-#destroy:
-#stage: destroy
-#script:
-#- terraform destroy -auto-approve
-#dependencies:
-# - apply
-# when: manual
+destroy:
+  stage: destroy
+  script:
+  - terraform destroy -auto-approve
 
-validate:
-  stage: validate
-  script:
-  - terraform validate
-plan:
-  stage: plan
-  script:
-  - terraform plan -out "planfile"
-  dependencies:
-  - validate
-  artifacts:
-    paths:
-    - planfile
-apply:
-  stage: apply
-  script:
-  - terraform apply -input=false "planfile"
-  dependencies:
-  - plan
+
+
