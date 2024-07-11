@@ -35,6 +35,7 @@ apply:
   - terraform apply -input=false "planfile"
   dependencies:
   - plan
+  when: manual
 
 #destroy:
 #  stage: destroy
