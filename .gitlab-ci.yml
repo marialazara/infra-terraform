@@ -1,8 +1,8 @@
 stages:
 - validate
+- destroy
 - plan
 - apply
-- destroy
 image:
   name: hashicorp/terraform:light
   entrypoint:
@@ -14,6 +14,15 @@ before_script:
 - rm -rf .terraform
 - terraform --version
 - terraform init
+
+#destroy:
+#stage: destroy
+#script:
+#- terraform destroy -auto-approve
+#dependencies:
+# - apply
+# when: manual
+
 validate:
   stage: validate
   script:
@@ -33,12 +42,3 @@ apply:
   - terraform apply -input=false "planfile"
   dependencies:
   - plan
-  when: manual
-
-#destroy:
-#stage: destroy
-#script:
-#- terraform destroy -auto-approve
-#dependencies:
-# - apply
-# when: manual
