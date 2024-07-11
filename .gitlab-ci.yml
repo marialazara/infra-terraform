@@ -2,6 +2,7 @@ stages:
 - validate
 - plan
 - apply
+- destroy
 image:
   name: hashicorp/terraform:light
   entrypoint:
@@ -21,7 +22,6 @@ plan:
   stage: plan
   script:
   - terraform plan -out "planfile"
-  - export SSH_KEY=${SSH_KEY}
   dependencies:
   - validate
   artifacts:
@@ -33,4 +33,12 @@ apply:
   - terraform apply -input=false "planfile"
   dependencies:
   - plan
+  when: manual
+
+destroy:
+  stage: destroy
+  script:
+  - terraform destroy -auto-approve
+  dependencies:
+  - apply
   when: manual
