@@ -9,7 +9,7 @@ Este repositório contém a configuração do Terraform para criar e gerenciar u
 - **backend.tf**: Configura o backend remoto no S3 para armazenar o estado do Terraform, garantindo que múltiplos usuários possam colaborar e que o estado seja persistente.
 
 ### Data Source
-- **data.tf**: Utiliza um data source para obter a Amazon Machine Image (AMI) mais recente do Amazon Linux 2.
+- **data.tf**: Utiliza um data source para obter o ID do Elastic IP usado para a aplicação.
 
 ### Instância EC2
 - **ec2.tf**: Cria uma instância EC2 usando a AMI obtida, especifica um script de inicialização (`user_data.sh`) que instala o Docker, inicia o serviço e executa um contêiner Docker.
