@@ -35,12 +35,12 @@ apply:
   - terraform apply -input=false "planfile"
   dependencies:
   - plan
-  #when: manual
+  when: manual
 
-#destroy:
-#  stage: destroy
-#  script:
-#  - terraform destroy -auto-approve
+destroy:
+  stage: destroy
+  script:
+  - terraform destroy -auto-approve
 
 
 
